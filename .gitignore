@@ -12,6 +12,7 @@
 hs_err_pid*
 
 # Intellij
+.iml
 .idea/
 .DB_Store
 target/
