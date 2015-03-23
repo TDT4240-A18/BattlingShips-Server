@@ -1,6 +1,7 @@
 <html>
 <body>
 <h2></h2>
-<%=System.currentTimeMillis()%>
+${game}
+
 </body>
 </html>
