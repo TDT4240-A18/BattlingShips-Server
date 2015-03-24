@@ -9,39 +9,41 @@ import java.util.List;
  * Created by FanChun & GuoJunjun on March 17, 2015.
  */
 public class Game {
-    private String[][] board;
-    private List<String> playerlist;
+    private Player[][] board;
+    private List<Player> playerlist;
     private int state;
 
     public Game(String username) {
+        this.state = 0;
         this.playerlist = new ArrayList<>();
-        playerlist.add(username);
+        playerlist.add(new Player(username));
     }
 
-    public Game(String[][] board, List<String> playerlist, int state) {
+    public Game(Player[][] board, List<Player> playerlist, int state) {
+        this.state = 0;
         this.board = board;
         this.playerlist = playerlist;
         this.state = state;
     }
 
-    public String[][] getBoard() {
+    public Player[][] getBoard() {
         return board;
     }
 
-    public void setBoard(String[][] board) {
+    public void setBoard(Player[][] board) {
         this.board = board;
     }
 
-    public List<String> getPlayerlist() {
+    public List<Player> getPlayerlist() {
         return playerlist;
     }
 
-    public void setPlayerlist(List<String> playerlist) {
+    public void setPlayerlist(List<Player> playerlist) {
         this.playerlist = playerlist;
     }
 
     public void addPlayer(String username) {
-        this.playerlist.add(username);
+        this.playerlist.add(new Player(username));
     }
 
     public int getState() {
@@ -54,7 +56,51 @@ public class Game {
 
     @Override
     public String toString() {
+        return "new game: " + playerlist.toString() + printBoard();
+    }
 
-        return "new game: " + playerlist.toString();
+    public boolean isInGame(String username) {
+        for (Player p : getPlayerlist()) {
+            if (p.getUsername().equals(username)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean isEveryoneReady() {
+        for (Player p : getPlayerlist()) {
+            if (!p.isReady()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public Player getPlayer(String username) {
+        for (Player p : getPlayerlist()) {
+            if (p.getUsername().equals(username)) {
+                return p;
+            }
+        }
+        return null;
+    }
+
+    public String printBoard() {
+        String b = "";
+        if (board != null) {
+            for (int i = 0; i < board.length; i++) {
+                b += (i + 1) + ":[ ";
+                for (int j = 0; j < board[i].length; j++) {
+                    if (board[i][j] == null) {
+                        b += "null; ";
+                    } else {
+                        b += board[i][j].getUsername() + "; ";
+                    }
+                }
+                b += " ] ";
+            }
+        }
+        return b;
     }
 }

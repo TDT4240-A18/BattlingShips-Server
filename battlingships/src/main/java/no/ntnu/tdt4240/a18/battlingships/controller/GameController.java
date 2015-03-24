@@ -33,9 +33,10 @@ public class GameController {
     public String create(
             HttpServletRequest request, @RequestParam("username") String username) {
         ServletContext application = request.getServletContext();
+        if (application.getAttribute("game") != null) {return new Result("create", "fail").toString();}
         Game game = gameService.create(username);
         application.setAttribute("game", game);
-        return new Result("create", "success", "game", game.toString()).toString();
+        return new Result("create", "success", "game", game.getPlayerlist().toString()).toString();
     }
 
     @Scope("prototype")
@@ -49,6 +50,36 @@ public class GameController {
         if (game == null) {
             return new Result("join", "fail").toString();
         }
+        return new Result("join", "success", "game", game.getPlayerlist().toString()).toString();
+    }
+
+
+    @Scope("prototype")
+    @ResponseBody
+    @RequestMapping(value = "ready", method = RequestMethod.GET)
+    public String ready(
+            HttpServletRequest request, @RequestParam("username") String username) {
+        ServletContext application = request.getServletContext();
+        Game game = (Game) application.getAttribute("game");
+        game = this.gameService.ready(game, username);
+        if (game == null) {
+            return new Result("ready", "fail").toString();
+        }
         return new Result("join", "success", "game", game.toString()).toString();
     }
+
+    @Scope("prototype")
+    @ResponseBody
+    @RequestMapping(value = "check", method = RequestMethod.GET)
+    public String check(
+            HttpServletRequest request, @RequestParam("username") String username) {
+        ServletContext application = request.getServletContext();
+        Game game = (Game) application.getAttribute("game");
+        String currentPlayerName = this.gameService.check(game, username);
+        if (currentPlayerName == null) {
+            return new Result("check", "no").toString();
+        }
+        return new Result("check", "success", "currentPlayerName", currentPlayerName).toString();
+    }
+
 }
