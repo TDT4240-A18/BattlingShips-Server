@@ -39,8 +39,10 @@ public class GameService {
                     list.add(i);
                 }
                 for (Player p : game.getPlayerlist()) {
-                    board[(int) list.remove((int) Math.random() * list.size())][(int) Math.random() * board[0].length]
-                            = p;
+                    p.setXY(
+                            (int) list.remove((int) Math.random() * list.size()),
+                            (int) (Math.random() * board[0].length));
+                    board[p.getX()][p.getY()] = p;
                 }
                 game.setBoard(board);
                 game.setState(1);
@@ -59,4 +61,5 @@ public class GameService {
             return game.getPlayerlist().get(game.getState() % (game.getPlayerlist().size()) - 1).getUsername();
         }
     }
+
 }

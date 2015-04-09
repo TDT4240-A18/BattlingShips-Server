@@ -54,11 +54,36 @@ public class Game {
         this.state = state;
     }
 
+    /**
+     * increase state by 1
+     */
+    public void nextState() {
+        this.state++;
+    }
+
+    /**
+     * @param x
+     * @param y
+     *
+     * @return true if it is a valid move
+     */
+    public boolean isValidMove(int x, int y) {
+        if (x < 0 || x >= board.length || y < 0 || y >= board[0].length) {
+            return false;
+        }
+        return true;
+    }
+
     @Override
     public String toString() {
         return "new game: " + playerlist.toString() + printBoard();
     }
 
+    /**
+     * @param username
+     *
+     * @return true if the username is in the player list
+     */
     public boolean isInGame(String username) {
         for (Player p : getPlayerlist()) {
             if (p.getUsername().equals(username)) {
@@ -68,6 +93,25 @@ public class Game {
         return false;
     }
 
+    /**
+     * check a user is on moving state
+     *
+     * @param username
+     *
+     * @return true if a given name is in the player list and can have a move action
+     */
+    public boolean isOnMoveState(String username) {
+        if (isInGame(username) &&
+            this.getPlayerlist().get(this.getState() % (this.getPlayerlist().size()) - 1).getUsername()
+                .equalsIgnoreCase(username)) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * @return true if every one is ready for the game
+     */
     public boolean isEveryoneReady() {
         for (Player p : getPlayerlist()) {
             if (!p.isReady()) {

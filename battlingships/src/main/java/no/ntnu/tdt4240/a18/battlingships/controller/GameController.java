@@ -53,7 +53,6 @@ public class GameController {
         return new Result("join", "success", "game", game.getPlayerlist().toString()).toString();
     }
 
-
     @Scope("prototype")
     @ResponseBody
     @RequestMapping(value = "ready", method = RequestMethod.GET)
@@ -65,7 +64,7 @@ public class GameController {
         if (game == null) {
             return new Result("ready", "fail").toString();
         }
-        return new Result("join", "success", "game", game.toString()).toString();
+        return new Result("ready", "success", "game", game.toString()).toString();
     }
 
     @Scope("prototype")
