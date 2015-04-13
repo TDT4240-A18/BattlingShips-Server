@@ -22,12 +22,30 @@ public class ActionService {
         return null;
     }
 
-    public String shoot(String username, int x, int y) {
-        return "shoot";
+    /**
+     * @param game
+     * @param username
+     * @param x
+     * @param y
+     *
+     * @return shoot result
+     */
+    public String shoot(Game game, String username, int x, int y) {
+        if (game.isValidMove(x, y)) {
+            Player p = game.getPlayer(x, y);
+            if (p != null) {
+                if (!p.reduceLife()) {
+                    game.removePlayer(p);
+                    return p.getUsername() + " dead !";
+                }
+            }
+        }
+        return "";
     }
 
-    public String doNothing(String username) {
-        return "do nothing";
+    public Game doNothing(Game game, String username) {
+        game.nextState();
+        return game;
     }
 
     public String check(String username) {

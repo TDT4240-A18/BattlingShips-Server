@@ -121,6 +121,13 @@ public class Game {
         return true;
     }
 
+    /**
+     * get player by player name
+     *
+     * @param username
+     *
+     * @return Player object
+     */
     public Player getPlayer(String username) {
         for (Player p : getPlayerlist()) {
             if (p.getUsername().equals(username)) {
@@ -128,6 +135,32 @@ public class Game {
             }
         }
         return null;
+    }
+
+    /**
+     * get player by x, y axis
+     *
+     * @param x
+     * @param y
+     *
+     * @return Player Instance
+     */
+    public Player getPlayer(int x, int y) {
+        for (Player p : getPlayerlist()) {
+            if (p.getX() == x && p.getY() == y) {
+                return p;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * remove a player from player list (dead player)
+     *
+     * @param player
+     */
+    public void removePlayer(Player player) {
+        playerlist.remove(player);
     }
 
     public String printBoard() {
@@ -146,5 +179,14 @@ public class Game {
             }
         }
         return b;
+    }
+
+    public String gameInfor() {
+        String s = playerlist.toString() + "\nstate: " + state + "\n";
+
+        for (Player p : playerlist) {
+            s += p.toString() + "\n";
+        }
+        return s;
     }
 }

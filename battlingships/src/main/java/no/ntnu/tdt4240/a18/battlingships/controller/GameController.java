@@ -52,6 +52,7 @@ public class GameController {
         if (game == null) {
             return new Result("join", "fail").toString();
         }
+        application.setAttribute("game", game);
         return new Result("join", "success", "game", game.getPlayerlist().toString()).toString();
     }
 
@@ -66,6 +67,7 @@ public class GameController {
         if (game == null) {
             return new Result("ready", "fail").toString();
         }
+        application.setAttribute("game", game);
         return new Result("ready", "success", "game", game.toString()).toString();
     }
 
@@ -85,9 +87,22 @@ public class GameController {
 
     @Scope("prototype")
     @ResponseBody
+    @RequestMapping(value = "finish", method = RequestMethod.GET)
+    public String finish(
+            HttpServletRequest request, @RequestParam("username") String username) {
+        ServletContext application = request.getServletContext();
+        Game game = null;
+        application.setAttribute("game", game);
+        return new Result("finish", "success").toString();
+    }
+
+    @Scope("prototype")
+    @ResponseBody
     @RequestMapping(value = "observe", method = RequestMethod.GET)
     public ModelAndView observe(ModelMap model) {
         model.addAttribute("message", "Hello Spring MVC Framework!");
         return new ModelAndView("index");
     }
+
+
 }

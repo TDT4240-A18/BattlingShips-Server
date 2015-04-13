@@ -9,10 +9,32 @@ public class Player {
     private String username;
     private boolean ready;
     private int x, y;
+    private int life;
+
+    public int getLife() {
+        return life;
+    }
+
+    public void setLife(int life) {
+        this.life = life;
+    }
+
+    /**
+     * @return true if life not equal to 0
+     */
+    public boolean reduceLife() {
+        this.life--;
+        if (life <= 0) {
+            return false;
+        }
+        return true;
+    }
 
     public Player(String username) {
         this.username = username;
         this.ready = false;
+        this.life = 3;
+
     }
 
     public String getUsername() {

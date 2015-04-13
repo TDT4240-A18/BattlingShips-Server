@@ -32,27 +32,39 @@ public class ActionController {
         ServletContext application = request.getServletContext();
         Game game = (Game) application.getAttribute("game");
         actionService.move(game, username, x, y);
+        application.setAttribute("game", game);
         return new Result("move", "success", "game", game.toString()).toString();
     }
 
     @Scope("prototype")
     @ResponseBody
     @RequestMapping(value = "shoot", method = RequestMethod.GET)
-    public String shoot(@RequestParam("username") String username, @RequestParam("x") int x, @RequestParam("y") int y) {
-        return "shoot";
+    public String shoot(
+            HttpServletRequest request, @RequestParam("username") String username, @RequestParam("x") int x,
+            @RequestParam("y") int y) {
+        ServletContext application = request.getServletContext();
+        Game game = (Game) application.getAttribute("game");
+        String shootResult = actionService.shoot(game, username, x, y);
+        application.setAttribute("game", game);
+        return new Result("shoot", "success", "result", shootResult).toString();
     }
 
     @Scope("prototype")
     @ResponseBody
     @RequestMapping(value = "doNothing", method = RequestMethod.GET)
-    public String doNothing(@RequestParam("username") String username) {
-        return "do nothing";
+    public String doNothing(HttpServletRequest request, @RequestParam("username") String username) {
+        ServletContext application = request.getServletContext();
+        Game game = (Game) application.getAttribute("game");
+        actionService.doNothing(game, username);
+        application.setAttribute("game", game);
+        return new Result("doNothing", "success", "game", game.toString()).toString();
     }
 
-    @Scope("prototype")
-    @ResponseBody
-    @RequestMapping(value = "check", method = RequestMethod.GET)
-    public String check(@RequestParam("username") String username) {
-        return "check";
-    }
+
+    //    @Scope("prototype")
+    //    @ResponseBody
+    //    @RequestMapping(value = "check", method = RequestMethod.GET)
+    //    public String check(@RequestParam("username") String username) {
+    //        return "check";
+    //    }
 }
