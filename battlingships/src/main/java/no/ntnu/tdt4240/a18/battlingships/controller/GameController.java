@@ -6,10 +6,12 @@ import no.ntnu.tdt4240.a18.battlingships.service.GameService;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -81,4 +83,11 @@ public class GameController {
         return new Result("check", "success", "currentPlayerName", currentPlayerName).toString();
     }
 
+    @Scope("prototype")
+    @ResponseBody
+    @RequestMapping(value = "observe", method = RequestMethod.GET)
+    public ModelAndView observe(ModelMap model) {
+        model.addAttribute("message", "Hello Spring MVC Framework!");
+        return new ModelAndView("index");
+    }
 }
