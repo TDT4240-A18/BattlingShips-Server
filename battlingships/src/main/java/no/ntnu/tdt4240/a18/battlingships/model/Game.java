@@ -163,11 +163,29 @@ public class Game {
         playerlist.remove(player);
     }
 
+    //    public String printBoard() {
+    //        String b = "";
+    //        if (board != null) {
+    //            for (int i = 0; i < board.length; i++) {
+    //                b += (i + 1) + ":[ ";
+    //                for (int j = 0; j < board[i].length; j++) {
+    //                    if (board[i][j] == null) {
+    //                        b += "null; ";
+    //                    } else {
+    //                        b += board[i][j].getUsername() + "; ";
+    //                    }
+    //                }
+    //                b += " ] ";
+    //            }
+    //        }
+    //        return b;
+    //    }
+
     public String printBoard() {
         String b = "";
         if (board != null) {
             for (int i = 0; i < board.length; i++) {
-                b += (i + 1) + ":[ ";
+                b += ":[ ";
                 for (int j = 0; j < board[i].length; j++) {
                     if (board[i][j] == null) {
                         b += "null; ";
@@ -182,11 +200,16 @@ public class Game {
     }
 
     public String gameInfor() {
-        String s = playerlist.toString() + "\nstate: " + state + "\n";
-
-        for (Player p : playerlist) {
-            s += p.toString() + "\n";
+        //game not started
+        if (state == 0) {
+            return playerlist.toString();
         }
-        return s;
+        //game started
+        //        String s = playerlist.toString() + "\nstate: " + state + "\n";
+        //
+        //        for (Player p : playerlist) {
+        //            s += p.toString() + "\n";
+        //        }
+        return "";
     }
 }

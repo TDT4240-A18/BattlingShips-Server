@@ -21,6 +21,12 @@
     <input type="submit" value="Submit"/>
 </form>
 
+<form action="leave" method="GET">
+    Player Name: <input type="text" name="username">
+    play leave the Game
+    <input type="submit" value="Submit"/>
+</form>
+
 <form action="check" method="GET">
     Player Name: <input type="text" name="username">
     Check

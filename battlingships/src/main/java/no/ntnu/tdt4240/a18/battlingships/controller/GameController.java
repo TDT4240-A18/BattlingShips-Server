@@ -48,12 +48,16 @@ public class GameController {
             HttpServletRequest request, @RequestParam("username") String username) {
         ServletContext application = request.getServletContext();
         Game game = (Game) application.getAttribute("game");
-        game = this.gameService.join(game, username);
         if (game == null) {
-            return new Result("join", "fail").toString();
+            return new Result("join", "no game to join").toString();
         }
-        application.setAttribute("game", game);
-        return new Result("join", "success", "game", game.getPlayerlist().toString()).toString();
+        if (game.getState() == 0) {
+            game = this.gameService.join(game, username);
+            application.setAttribute("game", game);
+            return new Result("join", "success", "game", game.getPlayerlist().toString()).toString();
+        }
+        return new Result("join", "cant not join after game started!").toString();
+
     }
 
     @Scope("prototype")
@@ -68,7 +72,7 @@ public class GameController {
             return new Result("ready", "fail").toString();
         }
         application.setAttribute("game", game);
-        return new Result("ready", "success", "game", game.toString()).toString();
+        return new Result("ready", "success", "game", game.printBoard()).toString();
     }
 
     @Scope("prototype")
@@ -77,12 +81,31 @@ public class GameController {
     public String check(
             HttpServletRequest request, @RequestParam("username") String username) {
         ServletContext application = request.getServletContext();
+        if (application.getAttribute("game") == null) {
+            return new Result("check", "no game created").toString();
+        }
+
         Game game = (Game) application.getAttribute("game");
         String currentPlayerName = this.gameService.check(game, username);
         if (currentPlayerName == null) {
-            return new Result("check", "no").toString();
+            return new Result("check", "have game").toString();
         }
         return new Result("check", "success", "currentPlayerName", currentPlayerName).toString();
+    }
+
+    @Scope("prototype")
+    @ResponseBody
+    @RequestMapping(value = "leave", method = RequestMethod.GET)
+    public String leave(
+            HttpServletRequest request, @RequestParam("username") String username) {
+        ServletContext application = request.getServletContext();
+        Game game = (Game) application.getAttribute("game");
+        if (game == null) {
+            return new Result("leave", "fail").toString();
+        }
+        game = this.gameService.leave(game, username);
+        application.setAttribute("game", game);
+        return new Result("leave", "success", "game", game.printBoard()).toString();
     }
 
     @Scope("prototype")

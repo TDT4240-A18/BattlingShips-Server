@@ -67,4 +67,16 @@ public class ActionController {
     //    public String check(@RequestParam("username") String username) {
     //        return "check";
     //    }
+
+    @Scope("prototype")
+    @ResponseBody
+    @RequestMapping(value = "infor", method = RequestMethod.GET)
+    public String infor(HttpServletRequest request) {
+        ServletContext application = request.getServletContext();
+        Game game = (Game) application.getAttribute("game");
+        if (game == null) {
+            return new Result("infor", "no game created").toString();
+        }
+        return new Result("infor", game.toString()).toString();
+    }
 }

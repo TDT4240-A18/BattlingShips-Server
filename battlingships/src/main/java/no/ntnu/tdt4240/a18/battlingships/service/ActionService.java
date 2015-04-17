@@ -12,10 +12,12 @@ public class ActionService {
 
     public Game move(Game game, String username, int x, int y) {
         if (game.isOnMoveState(username) && game.isValidMove(x, y)) {
-            Player p = game.getPlayer(username);
-            game.getBoard()[p.getX()][p.getY()] = null; // set players board position null
-            p.setXY(x, y);// set new position to Player
-            game.getBoard()[p.getX()][p.getY()] = p; // set new board position to player
+            if (game.getPlayer(x, y) == null) {
+                Player p = game.getPlayer(username);
+                game.getBoard()[p.getX()][p.getY()] = null; // set players board position null
+                p.setXY(x, y);// set new position to Player
+                game.getBoard()[p.getX()][p.getY()] = p; // set new board position to player
+            }
             game.nextState();
             return game;
         }
