@@ -19,12 +19,8 @@ public class GameService {
     }
 
     public Game join(Game game, String username) {
-//        if (game.isInGame(username)) {
-//            return null;
-//        } else {
-            game.addPlayer(username);
-            return game;
-//        }
+        game.addPlayer(username);
+        return game;
     }
 
     public Game ready(Game game, String username) {
@@ -33,8 +29,6 @@ public class GameService {
         } else {
             game.getPlayer(username).setReady(true);
             if (game.isEveryoneReady() && game.getPlayerlist().size() > 1) {
-                //                Player[][] board = new Player[4][game.getPlayerlist().size()];
-                //                Player[][] board = new Player[4][4];
                 int boardsize = 4;
                 ArrayList list = new ArrayList();
                 for (int i = 0; i < boardsize; i++) {
@@ -43,7 +37,6 @@ public class GameService {
                 for (Player p : game.getPlayerlist()) {
                     p.setXY(
                             (int) list.remove((int) (Math.random() * list.size())), (int) (Math.random() * boardsize));
-                    //                    board[p.getX()][p.getY()] = p;
                 }
                 game.setBoard(boardsize);
                 game.setState(1);
@@ -61,11 +54,15 @@ public class GameService {
      * @return
      */
     public Game leave(Game game, String username) {
-        Player player = (game.getPlayer(username));
-        player.setLeft(true);
-        game.removePlayer(player);
-        if (game.getPlayerlist().size() == 0) {
-            game = null;
+        if (game.getState() == 0) {
+            game.removePlayerBS(game.getPlayer(username));
+        } else {
+            Player player = (game.getPlayer(username));
+            player.setLeft(true);
+            game.removePlayer(player);
+            if (game.getPlayerlist().size() == 0) {
+                game = null;
+            }
         }
         return game;
     }

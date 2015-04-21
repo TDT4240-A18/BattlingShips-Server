@@ -5,7 +5,6 @@ import no.ntnu.tdt4240.a18.battlingships.model.Result;
 import no.ntnu.tdt4240.a18.battlingships.service.GameService;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -116,6 +115,9 @@ public class GameController {
         }
         game = this.gameService.leave(game, username);
         application.setAttribute("game", game);
+        if (game.getState() == 0) {
+            return new Result("leave", "success", "game", "Not started!").toString();
+        }
         return new Result("leave", "success", "game", game.printBoard()).toString();
     }
 

@@ -21,15 +21,6 @@ public class Game {
         this.playerlistInactive = new ArrayList<Player>();
     }
 
-    //    public Game(Player[][] board, List<Player> playerlist, int state) {
-    //    public Game(int boardsize, List<Player> playerlist, int state) {
-    //        this.state = 0;
-    //        this.board = new Player[boardsize][boardsize];
-    //        this.playerlist = playerlist;
-    //        this.state = state;
-    //        this.playerlistInactive = new ArrayList<Player>();
-    //    }
-
     /**
      * @return the updated board filled with players
      */
@@ -48,9 +39,6 @@ public class Game {
     public void setBoard(int boardsize) {
         this.board = new Player[boardsize][boardsize];
     }
-    //    public void setBoard(Player[][] board) {
-    //        this.board = board;
-    //    }
 
     public List<Player> getPlayerlist() {
         return playerlist;
@@ -190,24 +178,18 @@ public class Game {
         playerlist.remove(player);
     }
 
-    //    public String printBoard() {
-    //        String b = "";
-    //        if (board != null) {
-    //            for (int i = 0; i < board.length; i++) {
-    //                b += (i + 1) + ":[ ";
-    //                for (int j = 0; j < board[i].length; j++) {
-    //                    if (board[i][j] == null) {
-    //                        b += "null; ";
-    //                    } else {
-    //                        b += board[i][j].getUsername() + "; ";
-    //                    }
-    //                }
-    //                b += " ] ";
-    //            }
-    //        }
-    //        return b;
-    //    }
+    /**
+     * remove a player from player list (before game started )
+     *
+     * @param player
+     */
+    public void removePlayerBS(Player player) {
+        playerlist.remove(player);
+    }
 
+    /**
+     * @return board as a string
+     */
     public String printBoard() {
         String b = "";
         if (getBoard() != null) {
@@ -226,6 +208,9 @@ public class Game {
         return b;
     }
 
+    /**
+     * @return
+     */
     public String gameInfor() {
         //game not started
         if (state == 0) {

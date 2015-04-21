@@ -67,14 +67,6 @@ public class ActionController {
         return new Result("doNothing", "success", "game", "no game created").toString();
     }
 
-
-    //    @Scope("prototype")
-    //    @ResponseBody
-    //    @RequestMapping(value = "check", method = RequestMethod.GET)
-    //    public String check(@RequestParam("username") String username) {
-    //        return "check";
-    //    }
-
     @Scope("prototype")
     @ResponseBody
     @RequestMapping(value = "infor", method = RequestMethod.GET)
@@ -88,13 +80,6 @@ public class ActionController {
             return new Result("infor", "game created", "playerList", game.getPlayerlist().toString(), game.getState())
                     .toString();
         }
-        //        if (game.getPlayerlist().size() == 1 && game.getState() != 0) {
-        //            return new Result(
-        //                    "infor", "game started", "board", game.printBoard(), game.getPlayerlist().get(0)
-        // .toString(),
-        //                    game.getState(), game.getPlayerlist().toString(), game.getPlayerlistInactive().toString())
-        //                    .toString();
-        //        }
         // last player on the list win the game
         if (game.getPlayerlist().size() <= 1 && game.getState() >= 1) {
             String winner = game.getPlayerlist().get(0).getUsername();
