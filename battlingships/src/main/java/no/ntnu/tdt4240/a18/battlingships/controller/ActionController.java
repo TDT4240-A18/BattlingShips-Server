@@ -55,9 +55,16 @@ public class ActionController {
     public String doNothing(HttpServletRequest request, @RequestParam("username") String username) {
         ServletContext application = request.getServletContext();
         Game game = (Game) application.getAttribute("game");
-        actionService.doNothing(game, username);
-        application.setAttribute("game", game);
-        return new Result("doNothing", "success", "game", game.toString()).toString();
+        if (game != null) {
+            if (game.isInGame(username)) {
+                game = actionService.doNothing(game, username);
+                application.setAttribute("game", game);
+                return new Result("doNothing", "success", "game", game.toString()).toString();
+            }
+
+            return new Result("doNothing", "success", "game", "you are not in the game!").toString();
+        }
+        return new Result("doNothing", "success", "game", "no game created").toString();
     }
 
 
@@ -77,6 +84,28 @@ public class ActionController {
         if (game == null) {
             return new Result("infor", "no game created").toString();
         }
-        return new Result("infor", game.toString()).toString();
+        if (game.getState() == 0) {
+            return new Result("infor", "game created", "playerList", game.getPlayerlist().toString(), game.getState())
+                    .toString();
+        }
+        //        if (game.getPlayerlist().size() == 1 && game.getState() != 0) {
+        //            return new Result(
+        //                    "infor", "game started", "board", game.printBoard(), game.getPlayerlist().get(0)
+        // .toString(),
+        //                    game.getState(), game.getPlayerlist().toString(), game.getPlayerlistInactive().toString())
+        //                    .toString();
+        //        }
+        // last player on the list win the game
+        if (game.getPlayerlist().size() <= 1 && game.getState() >= 1) {
+            String winner = game.getPlayerlist().get(0).getUsername();
+            game = null;
+            application.setAttribute("game", game);
+            return new Result("finish", winner + " Win The Game !").toString();
+        }
+
+        return new Result(
+                "infor", "game started", "board", game.printBoard(), (game.getPlayerlist().get(
+                game.getState() % (game.getPlayerlist().size())).getUsername()), game.getState(),
+                game.getPlayerlist().toString(), game.getPlayerlistInactive().toString()).toString();
     }
 }

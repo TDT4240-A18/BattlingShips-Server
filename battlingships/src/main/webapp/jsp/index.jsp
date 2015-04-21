@@ -23,7 +23,7 @@
 
 <form action="leave" method="GET">
     Player Name: <input type="text" name="username">
-    play leave the Game
+    player leave the Game
     <input type="submit" value="Submit"/>
 </form>
 
@@ -58,6 +58,14 @@
     <input type="submit" value="Submit"/>
 </form>
 <p></p>
+
+
+<form action="/action/infor" method="GET">
+    run get infor:
+    <input type="submit" value="Submit"/>
+</form>
+<p></p>
+
 
 <p>Finish:</p>
 

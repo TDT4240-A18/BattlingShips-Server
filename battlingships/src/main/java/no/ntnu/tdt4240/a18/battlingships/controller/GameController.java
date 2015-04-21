@@ -52,11 +52,15 @@ public class GameController {
             return new Result("join", "no game to join").toString();
         }
         if (game.getState() == 0) {
+            // player name is already used
+            if (game.isInGame(username)) {
+                return new Result("join", "Name already taken!").toString();
+            }
             game = this.gameService.join(game, username);
             application.setAttribute("game", game);
             return new Result("join", "success", "game", game.getPlayerlist().toString()).toString();
         }
-        return new Result("join", "cant not join after game started!").toString();
+        return new Result("join", "can not join after game started!").toString();
 
     }
 
@@ -67,11 +71,15 @@ public class GameController {
             HttpServletRequest request, @RequestParam("username") String username) {
         ServletContext application = request.getServletContext();
         Game game = (Game) application.getAttribute("game");
-        game = this.gameService.ready(game, username);
         if (game == null) {
             return new Result("ready", "fail").toString();
         }
+        game = this.gameService.ready(game, username);
         application.setAttribute("game", game);
+        if (game.getState() == 0) {
+            return new Result("ready", "success", "game", "no board").toString();
+        }
+
         return new Result("ready", "success", "game", game.printBoard()).toString();
     }
 
@@ -88,7 +96,10 @@ public class GameController {
         Game game = (Game) application.getAttribute("game");
         String currentPlayerName = this.gameService.check(game, username);
         if (currentPlayerName == null) {
-            return new Result("check", "have game").toString();
+            if (game.getPlayer(username) == null) {
+                return new Result("check", "you are not in the game").toString();
+            }
+            return new Result("check", "game created").toString();
         }
         return new Result("check", "success", "currentPlayerName", currentPlayerName).toString();
     }
@@ -116,7 +127,7 @@ public class GameController {
         ServletContext application = request.getServletContext();
         Game game = null;
         application.setAttribute("game", game);
-        return new Result("finish", "success").toString();
+        return new Result("finish", "game finished").toString();
     }
 
     @Scope("prototype")
@@ -126,6 +137,4 @@ public class GameController {
         model.addAttribute("message", "Hello Spring MVC Framework!");
         return new ModelAndView("index");
     }
-
-
 }

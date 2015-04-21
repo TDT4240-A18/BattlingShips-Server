@@ -14,9 +14,9 @@ public class ActionService {
         if (game.isOnMoveState(username) && game.isValidMove(x, y)) {
             if (game.getPlayer(x, y) == null) {
                 Player p = game.getPlayer(username);
-                game.getBoard()[p.getX()][p.getY()] = null; // set players board position null
+                //                game.getBoard()[p.getX()][p.getY()] = null; // set players board position null
                 p.setXY(x, y);// set new position to Player
-                game.getBoard()[p.getX()][p.getY()] = p; // set new board position to player
+                //                game.getBoard()[p.getX()][p.getY()] = p; // set new board position to player
             }
             game.nextState();
             return game;
@@ -34,9 +34,11 @@ public class ActionService {
      */
     public String shoot(Game game, String username, int x, int y) {
         if (game.isValidMove(x, y)) {
+            game.nextState();
             Player p = game.getPlayer(x, y);
             if (p != null) {
                 if (!p.reduceLife()) {
+                    p.setDead(true);
                     game.removePlayer(p);
                     return p.getUsername() + " dead !";
                 }

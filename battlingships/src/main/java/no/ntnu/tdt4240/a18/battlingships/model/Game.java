@@ -11,28 +11,46 @@ import java.util.List;
 public class Game {
     private Player[][] board;
     private List<Player> playerlist;
+    private List<Player> playerlistInactive;
     private int state;
 
     public Game(String username) {
         this.state = 0;
         this.playerlist = new ArrayList<>();
         playerlist.add(new Player(username));
+        this.playerlistInactive = new ArrayList<Player>();
     }
 
-    public Game(Player[][] board, List<Player> playerlist, int state) {
-        this.state = 0;
-        this.board = board;
-        this.playerlist = playerlist;
-        this.state = state;
-    }
+    //    public Game(Player[][] board, List<Player> playerlist, int state) {
+    //    public Game(int boardsize, List<Player> playerlist, int state) {
+    //        this.state = 0;
+    //        this.board = new Player[boardsize][boardsize];
+    //        this.playerlist = playerlist;
+    //        this.state = state;
+    //        this.playerlistInactive = new ArrayList<Player>();
+    //    }
 
+    /**
+     * @return the updated board filled with players
+     */
     public Player[][] getBoard() {
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board[0].length; j++) {
+                board[i][j] = null;
+            }
+        }
+        for (Player p : playerlist) {
+            board[p.getX()][p.getY()] = p;
+        }
         return board;
     }
 
-    public void setBoard(Player[][] board) {
-        this.board = board;
+    public void setBoard(int boardsize) {
+        this.board = new Player[boardsize][boardsize];
     }
+    //    public void setBoard(Player[][] board) {
+    //        this.board = board;
+    //    }
 
     public List<Player> getPlayerlist() {
         return playerlist;
@@ -40,6 +58,14 @@ public class Game {
 
     public void setPlayerlist(List<Player> playerlist) {
         this.playerlist = playerlist;
+    }
+
+    public List<Player> getPlayerlistInactive() {
+        return playerlistInactive;
+    }
+
+    public void addPlayerlistInactive(List<Player> playerlistInactive) {
+        this.playerlistInactive = playerlistInactive;
     }
 
     public void addPlayer(String username) {
@@ -68,7 +94,7 @@ public class Game {
      * @return true if it is a valid move
      */
     public boolean isValidMove(int x, int y) {
-        if (x < 0 || x >= board.length || y < 0 || y >= board[0].length) {
+        if (x < 0 || x >= 4 || y < 0 || y >= 4) {
             return false;
         }
         return true;
@@ -102,7 +128,7 @@ public class Game {
      */
     public boolean isOnMoveState(String username) {
         if (isInGame(username) &&
-            this.getPlayerlist().get(this.getState() % (this.getPlayerlist().size()) - 1).getUsername()
+            this.getPlayerlist().get(this.getState() % (this.getPlayerlist().size())).getUsername()
                 .equalsIgnoreCase(username)) {
             return true;
         }
@@ -155,11 +181,12 @@ public class Game {
     }
 
     /**
-     * remove a player from player list (dead player)
+     * remove a player from player list (dead player or player left the game)
      *
      * @param player
      */
     public void removePlayer(Player player) {
+        playerlistInactive.add(player);
         playerlist.remove(player);
     }
 
@@ -183,17 +210,17 @@ public class Game {
 
     public String printBoard() {
         String b = "";
-        if (board != null) {
-            for (int i = 0; i < board.length; i++) {
-                b += ":[ ";
-                for (int j = 0; j < board[i].length; j++) {
-                    if (board[i][j] == null) {
-                        b += "null; ";
+        if (getBoard() != null) {
+            for (int i = 0; i < getBoard().length; i++) {
+                b += ":[";
+                for (int j = 0; j < getBoard()[i].length; j++) {
+                    if (getBoard()[i][j] == null) {
+                        b += "null;";
                     } else {
-                        b += board[i][j].getUsername() + "; ";
+                        b += getBoard()[i][j].getUsername() + ";";
                     }
                 }
-                b += " ] ";
+                b += "]";
             }
         }
         return b;
@@ -204,12 +231,16 @@ public class Game {
         if (state == 0) {
             return playerlist.toString();
         }
-        //game started
-        //        String s = playerlist.toString() + "\nstate: " + state + "\n";
-        //
-        //        for (Player p : playerlist) {
-        //            s += p.toString() + "\n";
-        //        }
-        return "";
+        if (playerlist.size() == 1) {
+            return "infor: " + "game started # " + "board: " + printBoard() + " # on player: " +
+                   getPlayerlist().get(0) +
+                   " # on state: " + getState() +
+                   " player " +
+                   "list: " + getPlayerlist().toString() + " # inactive player list: " +
+                   getPlayerlistInactive().toString();
+        }
+        return "infor: " + "game started # " + "board: " + printBoard() + " # on player: " + (getPlayerlist().get(
+                getState() % (getPlayerlist().size())).getUsername()) + " # on state: " + getState() + " player " +
+               "list: " + getPlayerlist().toString() + " # inactive player list: " + getPlayerlistInactive().toString();
     }
 }

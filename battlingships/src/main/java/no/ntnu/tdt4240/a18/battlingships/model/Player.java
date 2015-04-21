@@ -7,7 +7,7 @@ package no.ntnu.tdt4240.a18.battlingships.model;
  */
 public class Player {
     private String username;
-    private boolean ready;
+    private boolean ready, dead, left;
     private int x, y;
     private int life;
 
@@ -34,7 +34,25 @@ public class Player {
         this.username = username;
         this.ready = false;
         this.life = 3;
+        this.dead = false;
+        this.left = false;
 
+    }
+
+    public boolean isDead() {
+        return dead;
+    }
+
+    public void setDead(boolean dead) {
+        this.dead = dead;
+    }
+
+    public boolean isLeft() {
+        return left;
+    }
+
+    public void setLeft(boolean left) {
+        this.left = left;
     }
 
     public String getUsername() {
@@ -68,6 +86,12 @@ public class Player {
 
     @Override
     public String toString() {
-        return username + " : " + ready;
+        if (left) {
+            return username + ":" + "left" + ":" + life;
+        } else if (dead) {
+            return username + ":" + "dead" + ":" + life;
+        }
+
+        return username + ":" + ready + ":" + life;
     }
 }
